@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#070b14">
+<meta name="description" content="NEXA personal AI assistant and humanoid robotics project">
+<title>NEXA — Intelligent Personal AI</title>
+
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<style>
+:root{
+  --bg:#070b14;
+  --panel:#0b1220;
+  --line:#1b2a40;
+  --text:#edf5ff;
+  --muted:#9aaac0;
+  --blue:#43d9ff;
+  --green:#5cf0b4;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:85px}
+body{
+  margin:0;color:var(--text);
+  background:radial-gradient(ellipse at 80% 10%,#10234a,transparent 35%),var(--bg);
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  line-height:1.6;overflow-x:hidden
+}
+a{color:inherit;text-decoration:none}
+button,input{font:inherit}
+.wrap{width:min(1120px,calc(100% - 36px));margin:auto}
+header{
+  position:sticky;top:0;z-index:20;
+  background:#070b14f2;backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)
+}
+.nav-wrap{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-size:28px;font-weight:900;letter-spacing:5px}
+.logo span{color:var(--blue)}
+nav{display:flex;align-items:center;gap:26px}
+nav a{font-size:14px;color:var(--muted)}
+nav a:hover{color:var(--blue)}
+.menu{
+  display:none;width:44px;height:44px;border-radius:10px;
+  color:white;background:var(--panel);border:1px solid var(--line);font-size:23px
+}
+section{padding:76px 0}
+.hero{min-height:510px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:35px}
+.eyebrow{color:var(--blue);font-size:12px;letter-spacing:3px;font-weight:800}
+h1{font-size:clamp(42px,6vw,72px);line-height:1.08;letter-spacing:-2px;margin:16px 0}
+h1 span{color:var(--blue)}
+h2{font-size:clamp(30px,5vw,44px);line-height:1.2;margin:12px 0}
+.lead,.muted{color:var(--muted);line-height:1.85}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.btn{display:inline-block;padding:12px 18px;border:1px solid var(--line);border-radius:10px;font-weight:800}
+.primary{background:var(--blue);color:#04111b;border-color:var(--blue)}
+.hero-art{
+  min-height:330px;position:relative;display:grid;place-items:center;
+  border:1px solid var(--line);border-radius:24px;
+  background:radial-gradient(circle,#153255,#080d18 72%);overflow:hidden
+}
+.orbit{position:absolute;width:70%;aspect-ratio:1;border:1px solid #43d9ff60;border-radius:50%;animation:spin 22s linear infinite}
+.orbit:before{content:"";position:absolute;top:10%;left:20%;width:10px;height:10px;border-radius:50%;background:var(--blue);box-shadow:0 0 20px var(--blue)}
+.core{width:110px;height:110px;border:1px solid #43d9ff80;border-radius:50%;display:grid;place-items:center;color:var(--blue);font-size:46px;box-shadow:0 0 60px #43d9ff22;animation:pulse 4s infinite}
+.hud{position:absolute;bottom:15px;left:15px;right:15px;display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:10px;letter-spacing:1px}
+.section-head{text-align:center;max-width:700px;margin:0 auto 32px}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{padding:23px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#0d1727,#080d18)}
+.card-icon{font-size:25px;color:var(--blue)}
+.card h3{margin-bottom:6px}
+.card p{color:var(--muted);font-size:14px;line-height:1.8;margin-bottom:0}
+
+/* Chat layout */
+.chat-layout{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:26px;align-items:start}
+.chat-intro{min-width:0}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{padding:7px 11px;border:1px solid var(--line);border-radius:25px;color:var(--blue);font-size:11px}
+.chatbox{width:100%;min-width:0;border:1px solid var(--line);border-radius:18px;background:#09101c;overflow:hidden}
+.chat-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 17px;border-bottom:1px solid var(--line)}
+.chat-title{font-size:18px;font-weight:850}
+.status{color:var(--green);font-size:12px;white-space:nowrap}
+.messages{
+  padding:16px;min-height:300px;height:48vh;max-height:520px;
+  overflow-y:auto;display:flex;flex-direction:column;gap:13px
+}
+.msg{
+  padding:13px 15px;background:#121d30;border-radius:12px;
+  font-size:15px;line-height:1.8;max-width:96%;
+  overflow-wrap:anywhere;white-space:pre-wrap
+}
+.msg.user{align-self:flex-end;background:#10334a}
+.msg.error{border:1px solid #a84a5b;color:#ffd9df}
+.chat-form{display:flex;gap:9px;padding:11px;border-top:1px solid var(--line)}
+.chat-form input{
+  min-width:0;width:0;flex:1;padding:12px;
+  border:1px solid var(--line);border-radius:10px;
+  background:#060b14;color:white;outline:none
+}
+.chat-form input:focus{border-color:var(--blue)}
+.chat-form button{
+  flex-shrink:0;padding:0 17px;min-height:46px;
+  border:0;border-radius:10px;background:var(--blue);
+  color:#06111a;font-weight:900
+}
+.chat-form button:disabled{opacity:.6}
+.robot-panel{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#0b1425}
+model-viewer{display:block;width:100%;height:430px;background:transparent;--poster-color:transparent}
+.robot-note{padding:12px 16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+footer{padding:26px 0;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
+.footer-inner{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{50%{transform:scale(1.06);filter:brightness(1.2)}}
+
+/* Mobile layout */
+@media(max-width:760px){
+  .wrap{width:calc(100% - 32px)}
+  .nav-wrap{min-height:66px}
+  .logo{font-size:25px;letter-spacing:4px}
+  .menu{display:block}
+  nav{
+    display:none;position:absolute;top:66px;left:0;right:0;
+    padding:14px 20px 20px;background:#080d18;
+    border-bottom:1px solid var(--line);
+    flex-direction:column;align-items:stretch;gap:0
+  }
+  nav.open{display:flex}
+  nav a{padding:12px 4px;border-bottom:1px solid #1b2a404d}
+  nav a:last-child{border:0}
+  section{padding:55px 0}
+  .hero{grid-template-columns:minmax(0,1fr);gap:25px;min-height:auto;padding-top:42px}
+  h1{font-size:clamp(42px,12vw,60px);letter-spacing:-1.5px}
+  .hero-art{min-height:285px}
+  .cards{grid-template-columns:minmax(0,1fr)}
+  .chat-layout{grid-template-columns:minmax(0,1fr);gap:22px;align-items:stretch}
+  .chat-intro,.chatbox{width:100%;min-width:0}
+  .chat-intro h2{font-size:36px}
+  .messages{height:50vh;min-height:280px;max-height:470px;padding:13px}
+  .msg{max-width:100%;font-size:15px}
+  .chat-form{gap:7px;padding:9px}
+  .chat-form input{padding:11px 9px;font-size:14px}
+  .chat-form button{padding:0 14px;min-height:44px}
+  model-viewer{height:330px}
+  .footer-inner{flex-direction:column}
+}
+@media(max-width:360px){
+  .wrap{width:calc(100% - 24px)}
+  .chat-head{padding:12px}
+  .chat-title{font-size:16px}
+  .status{font-size:10px}
+  .chat-form button{padding:0 10px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="wrap nav-wrap">
+    <a class="logo" href="#home">NE<span>X</span>A</a>
+    <button class="menu" id="menu" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
+    <nav id="nav">
+      <a href="#home">HOME</a>
+      <a href="#technology">TECHNOLOGY</a>
+      <a href="#assistant">AI ASSISTANT</a>
+      <a href="#humanoid">HUMANOID</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section id="home">
+  <div class="wrap hero">
+    <div>
+      <div class="eyebrow">PERSONAL AI · FUTURE ROBOTICS</div>
+      <h1>Meet your next<br><span>intelligent</span> partner.</h1>
+      <p class="lead">NEXA is a personal AI assistant project exploring helpful conversation, useful technology, and a future with humanoid robotics.</p>
+      <div class="actions">
+        <a class="btn primary" href="#assistant">Talk to NEXA ↗</a>
+        <a class="btn" href="#humanoid">Explore the robot</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="orbit"></div><div class="core">✳</div>
+      <div class="hud"><span>NEXA CORE</span><span>AI SYSTEM ONLINE</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="technology">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">BUILT TO EXPLORE</div>
+      <h2>Technology with a purpose.</h2>
+      <p class="muted">A growing project combining AI conversation, practical tools, and interactive robotics concepts.</p>
+    </div>
+    <div class="cards">
+      <article class="card"><div class="card-icon">✳</div><h3>AI conversation</h3><p>Ask questions and explore ideas through a natural chat experience connected to an AI service.</p></article>
+      <article class="card"><div class="card-icon">⌘</div><h3>Useful tools</h3><p>A foundation for adding practical assistant features one step at a time.</p></article>
+      <article class="card"><div class="card-icon">◈</div><h3>Humanoid vision</h3><p>Explore an interactive 3D robot model as an early step toward a robotics project.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="assistant">
+  <div class="wrap chat-layout">
+    <div class="chat-intro">
+      <div class="eyebrow">YOUR DIGITAL ASSISTANT</div>
+      <h2>Talk to NEXA.</h2>
+      <p class="muted">Send a message and NEXA will respond using the connected AI backend.</p>
+      <div class="pills"><span class="pill">CHAT ONLINE</span><span class="pill">AI CONNECTED</span></div>
+    </div>
+    <div class="chatbox">
+      <div class="chat-head">
+        <span class="chat-title">✳ NEXA AI</span>
+        <span class="status" id="chatStatus">● AI ONLINE</span>
+      </div>
+      <div class="messages" id="messages" aria-live="polite">
+        <div class="msg">Hello! I'm NEXA. Send me a message to get started.</div>
+      </div>
+      <form class="chat-form" id="chatForm">
+        <input id="chatInput" name="message" type="text" placeholder="Message NEXA..." autocomplete="off" aria-label="Message NEXA" maxlength="4000" required>
+        <button id="sendButton" type="submit">SEND</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="humanoid">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">NEXA ROBOTICS DIVISION</div>
+      <h2>Meet the humanoid.</h2>
+      <p class="muted">Drag to rotate the 3D model and explore the robot concept.</p>
+    </div>
+    <div class="robot-panel">
+      <model-viewer src="assets/robonaut.glb" alt="NEXA humanoid robot 3D model" camera-controls auto-rotate rotation-per-second="12deg" shadow-intensity="1" loading="lazy">
+        <p slot="error" class="robot-note">Model unavailable. Check that assets/robonaut.glb exists.</p>
+      </model-viewer>
+      <div class="robot-note">NEXA HUMANOID · 3D CONCEPT PREVIEW</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© <span id="year"></span> NEXA PROJECT</span>
+    <span>PERSONAL AI ASSISTANT · FUTURE ROBOTICS</span>
+  </div>
+</footer>
+
+<script>
+const menu = document.getElementById('menu');
+const nav = document.getElementById('nav');
+
+menu.addEventListener('click', () => {
+  const open = nav.classList.toggle('open');
+  menu.setAttribute('aria-expanded', String(open));
+  menu.textContent = open ? '×' : '☰';
+});
+
+nav.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    nav.classList.remove('open');
+    menu.setAttribute('aria-expanded', 'false');
+    menu.textContent = '☰';
+  });
+});
+
+const form = document.getElementById('chatForm');
+const input = document.getElementById('chatInput');
+const messages = document.getElementById('messages');
+const sendButton = document.getElementById('sendButton');
+const chatStatus = document.getElementById('chatStatus');
+
+function addMessage(text, type = '') {
+  const el = document.createElement('div');
+  el.className = ('msg ' + type).trim();
+  el.textContent = text;
+  messages.appendChild(el);
+  messages.scrollTop = messages.scrollHeight;
+  return el;
+}
+
+form.addEventListener('submit', async event => {
+  event.preventDefault();
+  const text = input.value.trim();
+  if (!text || sendButton.disabled) return;
+
+  addMessage(text, 'user');
+  input.value = '';
+  input.disabled = true;
+  sendButton.disabled = true;
+  sendButton.textContent = '...';
+  chatStatus.textContent = '● THINKING';
+
+  const reply = addMessage('NEXA is thinking...');
+
+  try {
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({message: text})
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'AI request failed.');
+    if (typeof data.reply !== 'string' || !data.reply.trim()) {
+      throw new Error('NEXA returned an empty response.');
+    }
+
+    reply.textContent = data.reply.trim();
+    chatStatus.textContent = '● AI ONLINE';
+  } catch (error) {
+    reply.classList.add('error');
+    reply.textContent = 'Connection issue: ' + (error.message || 'Please try again.');
+    chatStatus.textContent = '● CONNECTION ISSUE';
+  } finally {
+    input.disabled = false;
+    sendButton.disabled = false;
+    sendButton.textContent = 'SEND';
+    input.focus();
+    messages.scrollTop = messages.scrollHeight;
+  }
+});
+
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
+
