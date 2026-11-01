@@ -83,8 +83,10 @@ app.post("/api/chat", async (req, res) => {
     if (typeof reply !== "string") {
       return res.status(502).json({ error: "Invalid AI response." });
     }
+const cleanReply = reply.replace(/\*\*/g, "");
 
-    res.json({ reply });
+res.json({ reply: cleanReply });
+
   } catch (error) {
     console.error("NEXA server error:", error.message);
     res.status(500).json({ error: "Something went wrong on the server." });
