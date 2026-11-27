@@ -1,335 +1,910 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#070b14">
-<meta name="description" content="NEXA personal AI assistant and humanoid robotics project">
-<title>NEXA — Intelligent Personal AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<title>Rudra.dev | Developer Portfolio</title>
 
 <style>
-:root{
-  --bg:#070b14;
-  --panel:#0b1220;
-  --line:#1b2a40;
-  --text:#edf5ff;
-  --muted:#9aaac0;
-  --blue:#43d9ff;
-  --green:#5cf0b4;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:85px}
-body{
-  margin:0;color:var(--text);
-  background:radial-gradient(ellipse at 80% 10%,#10234a,transparent 35%),var(--bg);
-  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
-  line-height:1.6;overflow-x:hidden
-}
-a{color:inherit;text-decoration:none}
-button,input{font:inherit}
-.wrap{width:min(1120px,calc(100% - 36px));margin:auto}
-header{
-  position:sticky;top:0;z-index:20;
-  background:#070b14f2;backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--line)
-}
-.nav-wrap{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.logo{font-size:28px;font-weight:900;letter-spacing:5px}
-.logo span{color:var(--blue)}
-nav{display:flex;align-items:center;gap:26px}
-nav a{font-size:14px;color:var(--muted)}
-nav a:hover{color:var(--blue)}
-.menu{
-  display:none;width:44px;height:44px;border-radius:10px;
-  color:white;background:var(--panel);border:1px solid var(--line);font-size:23px
-}
-section{padding:76px 0}
-.hero{min-height:510px;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:35px}
-.eyebrow{color:var(--blue);font-size:12px;letter-spacing:3px;font-weight:800}
-h1{font-size:clamp(42px,6vw,72px);line-height:1.08;letter-spacing:-2px;margin:16px 0}
-h1 span{color:var(--blue)}
-h2{font-size:clamp(30px,5vw,44px);line-height:1.2;margin:12px 0}
-.lead,.muted{color:var(--muted);line-height:1.85}
-.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
-.btn{display:inline-block;padding:12px 18px;border:1px solid var(--line);border-radius:10px;font-weight:800}
-.primary{background:var(--blue);color:#04111b;border-color:var(--blue)}
-.hero-art{
-  min-height:330px;position:relative;display:grid;place-items:center;
-  border:1px solid var(--line);border-radius:24px;
-  background:radial-gradient(circle,#153255,#080d18 72%);overflow:hidden
-}
-.orbit{position:absolute;width:70%;aspect-ratio:1;border:1px solid #43d9ff60;border-radius:50%;animation:spin 22s linear infinite}
-.orbit:before{content:"";position:absolute;top:10%;left:20%;width:10px;height:10px;border-radius:50%;background:var(--blue);box-shadow:0 0 20px var(--blue)}
-.core{width:110px;height:110px;border:1px solid #43d9ff80;border-radius:50%;display:grid;place-items:center;color:var(--blue);font-size:46px;box-shadow:0 0 60px #43d9ff22;animation:pulse 4s infinite}
-.hud{position:absolute;bottom:15px;left:15px;right:15px;display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:10px;letter-spacing:1px}
-.section-head{text-align:center;max-width:700px;margin:0 auto 32px}
-.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.card{padding:23px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#0d1727,#080d18)}
-.card-icon{font-size:25px;color:var(--blue)}
-.card h3{margin-bottom:6px}
-.card p{color:var(--muted);font-size:14px;line-height:1.8;margin-bottom:0}
 
-/* Chat layout */
-.chat-layout{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:26px;align-items:start}
-.chat-intro{min-width:0}
-.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-.pill{padding:7px 11px;border:1px solid var(--line);border-radius:25px;color:var(--blue);font-size:11px}
-.chatbox{width:100%;min-width:0;border:1px solid var(--line);border-radius:18px;background:#09101c;overflow:hidden}
-.chat-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 17px;border-bottom:1px solid var(--line)}
-.chat-title{font-size:18px;font-weight:850}
-.status{color:var(--green);font-size:12px;white-space:nowrap}
-.messages{
-  padding:16px;min-height:300px;height:48vh;max-height:520px;
-  overflow-y:auto;display:flex;flex-direction:column;gap:13px
+html {
+    scroll-behavior: smooth;
 }
-.msg{
-  padding:13px 15px;background:#121d30;border-radius:12px;
-  font-size:15px;line-height:1.8;max-width:96%;
-  overflow-wrap:anywhere;white-space:pre-wrap
-}
-.msg.user{align-self:flex-end;background:#10334a}
-.msg.error{border:1px solid #a84a5b;color:#ffd9df}
-.chat-form{display:flex;gap:9px;padding:11px;border-top:1px solid var(--line)}
-.chat-form input{
-  min-width:0;width:0;flex:1;padding:12px;
-  border:1px solid var(--line);border-radius:10px;
-  background:#060b14;color:white;outline:none
-}
-.chat-form input:focus{border-color:var(--blue)}
-.chat-form button{
-  flex-shrink:0;padding:0 17px;min-height:46px;
-  border:0;border-radius:10px;background:var(--blue);
-  color:#06111a;font-weight:900
-}
-.chat-form button:disabled{opacity:.6}
-.robot-panel{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#0b1425}
-model-viewer{display:block;width:100%;height:430px;background:transparent;--poster-color:transparent}
-.robot-note{padding:12px 16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
-footer{padding:26px 0;border-top:1px solid var(--line);color:var(--muted);font-size:12px}
-.footer-inner{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{50%{transform:scale(1.06);filter:brightness(1.2)}}
 
-/* Mobile layout */
-@media(max-width:760px){
-  .wrap{width:calc(100% - 32px)}
-  .nav-wrap{min-height:66px}
-  .logo{font-size:25px;letter-spacing:4px}
-  .menu{display:block}
-  nav{
-    display:none;position:absolute;top:66px;left:0;right:0;
-    padding:14px 20px 20px;background:#080d18;
-    border-bottom:1px solid var(--line);
-    flex-direction:column;align-items:stretch;gap:0
-  }
-  nav.open{display:flex}
-  nav a{padding:12px 4px;border-bottom:1px solid #1b2a404d}
-  nav a:last-child{border:0}
-  section{padding:55px 0}
-  .hero{grid-template-columns:minmax(0,1fr);gap:25px;min-height:auto;padding-top:42px}
-  h1{font-size:clamp(42px,12vw,60px);letter-spacing:-1.5px}
-  .hero-art{min-height:285px}
-  .cards{grid-template-columns:minmax(0,1fr)}
-  .chat-layout{grid-template-columns:minmax(0,1fr);gap:22px;align-items:stretch}
-  .chat-intro,.chatbox{width:100%;min-width:0}
-  .chat-intro h2{font-size:36px}
-  .messages{height:50vh;min-height:280px;max-height:470px;padding:13px}
-  .msg{max-width:100%;font-size:15px}
-  .chat-form{gap:7px;padding:9px}
-  .chat-form input{padding:11px 9px;font-size:14px}
-  .chat-form button{padding:0 14px;min-height:44px}
-  model-viewer{height:330px}
-  .footer-inner{flex-direction:column}
+body {
+    background: #080b14;
+    color: #edf2ff;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
 }
-@media(max-width:360px){
-  .wrap{width:calc(100% - 24px)}
-  .chat-head{padding:12px}
-  .chat-title{font-size:16px}
-  .status{font-size:10px}
-  .chat-form button{padding:0 10px}
+
+/* BACKGROUND */
+
+body::before {
+    content: "";
+    position: fixed;
+    top: -180px;
+    left: 25%;
+    width: 500px;
+    height: 500px;
+    background: #7040ff;
+    opacity: 0.13;
+    filter: blur(130px);
+    pointer-events: none;
+    z-index: -1;
 }
-@media(prefers-reduced-motion:reduce){
-  *,*:before,*:after{animation:none!important;scroll-behavior:auto!important}
+
+body::after {
+    content: "";
+    position: fixed;
+    bottom: -200px;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: #00d9ff;
+    opacity: 0.06;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* NAVBAR */
+
+.navbar {
+    padding: 18px 8%;
+    background: rgba(8, 11, 20, 0.96);
+    border-bottom: 1px solid #1e293b;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.nav-inner {
+    max-width: 1150px;
+    margin: auto;
+}
+
+.logo {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+    color: #a78bfa;
+    text-decoration: none;
+}
+
+.logo span {
+    color: #67e8f9;
+}
+
+.nav-links {
+    float: right;
+    padding-top: 5px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #b8c2d8;
+    margin-left: 20px;
+    font-size: 13px;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #67e8f9;
+}
+
+/* HERO */
+
+.hero {
+    max-width: 1150px;
+    margin: auto;
+    padding: 115px 8% 100px;
+}
+
+.eyebrow {
+    color: #67e8f9;
+    letter-spacing: 3px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.hero h1 {
+    font-size: 62px;
+    line-height: 1.15;
+    margin: 22px 0;
+}
+
+.hero h1 span {
+    color: #a78bfa;
+}
+
+.hero h2 {
+    font-size: 22px;
+    color: #cbd5e1;
+    font-weight: normal;
+    margin-bottom: 18px;
+}
+
+.hero p {
+    color: #94a3b8;
+    max-width: 650px;
+    font-size: 16px;
+}
+
+.buttons {
+    margin-top: 32px;
+}
+
+.button {
+    display: inline-block;
+    padding: 13px 24px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-right: 12px;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.primary {
+    background: #8b5cf6;
+    color: white;
+}
+
+.primary:hover {
+    background: #7c3aed;
+    transform: translateY(-2px);
+}
+
+.secondary {
+    border: 1px solid #334155;
+    color: #e2e8f0;
+}
+
+.secondary:hover {
+    border-color: #67e8f9;
+    color: #67e8f9;
+}
+
+.hero-label {
+    margin-top: 45px;
+    color: #64748b;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+/* GENERAL SECTIONS */
+
+.section {
+    padding: 85px 8%;
+}
+
+.container {
+    max-width: 1150px;
+    margin: auto;
+}
+
+.section-tag {
+    color: #67e8f9;
+    font-size: 12px;
+    letter-spacing: 3px;
+    font-weight: bold;
+}
+
+.section-title {
+    font-size: 36px;
+    margin: 12px 0 18px;
+}
+
+.section-desc {
+    color: #94a3b8;
+    max-width: 700px;
+    margin-bottom: 35px;
+}
+
+.about,
+.skills,
+.contact {
+    background: #0c1120;
+    border-top: 1px solid #1e293b;
+    border-bottom: 1px solid #1e293b;
+}
+
+/* ABOUT */
+
+.about-box {
+    background: #111827;
+    border: 1px solid #263248;
+    border-radius: 14px;
+    padding: 30px;
+}
+
+.about-box p {
+    color: #a8b4c8;
+    margin-bottom: 14px;
+}
+
+.about-box p:last-child {
+    margin-bottom: 0;
+}
+
+/* PROJECTS */
+
+.project-grid {
+    font-size: 0;
+}
+
+.project-card {
+    font-size: 15px;
+    display: inline-block;
+    vertical-align: top;
+    width: 31%;
+    margin: 1%;
+    min-height: 330px;
+    padding: 26px;
+    background: #111827;
+    border: 1px solid #263248;
+    border-radius: 13px;
+    transition: 0.3s;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    border-color: #8b5cf6;
+    box-shadow: 0 10px 30px rgba(112, 64, 255, 0.08);
+}
+
+/* CUSTOM SVG ICONS */
+
+.project-icon {
+    width: 66px;
+    height: 66px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a78bfa;
+    background: #17132b;
+    border: 1px solid #33285a;
+    border-radius: 14px;
+}
+
+.project-icon svg {
+    width: 42px;
+    height: 42px;
+    display: block;
+}
+
+.project-card:nth-child(2) .project-icon {
+    color: #67e8f9;
+    background: #0c1d29;
+    border-color: #214252;
+}
+
+.project-card:nth-child(3) .project-icon {
+    color: #a78bfa;
+    background: #17132b;
+    border-color: #33285a;
+}
+
+.project-card h3 {
+    color: #a78bfa;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.project-card p {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.project-type {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 5px 10px;
+    color: #67e8f9;
+    background: #0b1726;
+    border: 1px solid #23384c;
+    border-radius: 20px;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+}
+
+/* SKILLS */
+
+.skill-list {
+    margin-top: 25px;
+}
+
+.skill {
+    display: inline-block;
+    padding: 12px 20px;
+    margin: 7px;
+    background: #111827;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #dbeafe;
+    transition: 0.3s;
+}
+
+.skill:hover {
+    border-color: #67e8f9;
+    color: #67e8f9;
+    transform: translateY(-2px);
+}
+
+/* JOURNEY */
+
+.journey-box {
+    padding: 30px;
+    border-left: 3px solid #8b5cf6;
+    background: #111827;
+    border-radius: 0 12px 12px 0;
+}
+
+.journey-box h3 {
+    color: #67e8f9;
+    margin-bottom: 10px;
+}
+
+.journey-box p {
+    color: #94a3b8;
+}
+
+/* CONTACT */
+
+.contact {
+    text-align: center;
+}
+
+.contact-box {
+    padding: 35px;
+    border: 1px solid #29364c;
+    background: #111827;
+    border-radius: 15px;
+}
+
+.contact-box p {
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 15px auto;
+}
+
+.contact-button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 14px 25px;
+    background: #8b5cf6;
+    color: white;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.contact-button:hover {
+    background: #7c3aed;
+    transform: translateY(-2px);
+}
+
+/* FOOTER */
+
+footer {
+    padding: 25px 8%;
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
+    border-top: 1px solid #1e293b;
+}
+
+footer span {
+    color: #a78bfa;
+}
+
+/* RESPONSIVE TABLET */
+
+@media (max-width: 900px) {
+    .hero h1 {
+        font-size: 52px;
+    }
+
+    .project-card {
+        width: 47%;
+        margin: 1.5%;
+    }
+}
+
+/* RESPONSIVE MOBILE */
+
+@media (max-width: 600px) {
+    .navbar {
+        padding: 15px 5%;
+    }
+
+    .nav-links {
+        float: none;
+        margin-top: 15px;
+        line-height: 2.2;
+    }
+
+    .nav-links a {
+        margin: 0 12px 0 0;
+    }
+
+    .hero {
+        padding: 75px 6%;
+    }
+
+    .hero h1 {
+        font-size: 39px;
+    }
+
+    .hero h2 {
+        font-size: 18px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+    .section {
+        padding: 60px 6%;
+    }
+
+    .section-title {
+        font-size: 29px;
+    }
+
+    .project-card {
+        width: 100%;
+        margin: 12px 0;
+        min-height: auto;
+    }
+
+    .project-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .about-box,
+    .journey-box,
+    .contact-box {
+        padding: 23px;
+    }
 }
 </style>
 </head>
 
 <body>
-<header>
-  <div class="wrap nav-wrap">
-    <a class="logo" href="#home">NE<span>X</span>A</a>
-    <button class="menu" id="menu" type="button" aria-label="Toggle menu" aria-expanded="false">☰</button>
-    <nav id="nav">
-      <a href="#home">HOME</a>
-      <a href="#technology">TECHNOLOGY</a>
-      <a href="#assistant">AI ASSISTANT</a>
-      <a href="#humanoid">HUMANOID</a>
-    </nav>
-  </div>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+    <div class="nav-inner">
+
+        <a href="#home" class="logo">Rudra<span>.dev</span></a>
+
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#skills">Skills</a>
+            <a href="#journey">Journey</a>
+            <a href="#contact">Contact</a>
+        </div>
+
+    </div>
+</nav>
+
+<!-- HERO -->
+
+<header class="hero" id="home">
+
+    <div class="eyebrow">
+        STUDENT DEVELOPER � TECHNOLOGY ENTHUSIAST
+    </div>
+
+    <h1>
+        Building Intelligence.<br>
+        <span>Exploring Tomorrow.</span>
+    </h1>
+
+    <h2>Hi, I'm Rudra Veer Dwivedi.</h2>
+
+    <p>
+        I explore technology through coding, experimentation
+        and building projects. My interests include artificial
+        intelligence, web development and robotics.
+        I believe every idea is an opportunity to learn,
+        create and build something meaningful.
+    </p>
+
+    <div class="buttons">
+        <a href="#projects" class="button primary">
+            Explore My Projects
+        </a>
+
+        <a href="#about" class="button secondary">
+            About Me
+        </a>
+    </div>
+
+    <div class="hero-label">
+        PYTHON / JAVASCRIPT / C++
+    </div>
+
 </header>
 
-<main>
-<section id="home">
-  <div class="wrap hero">
-    <div>
-      <div class="eyebrow">PERSONAL AI · FUTURE ROBOTICS</div>
-      <h1>Meet your next<br><span>intelligent</span> partner.</h1>
-      <p class="lead">NEXA is a personal AI assistant project exploring helpful conversation, useful technology, and a future with humanoid robotics.</p>
-      <div class="actions">
-        <a class="btn primary" href="#assistant">Talk to NEXA ↗</a>
-        <a class="btn" href="#humanoid">Explore the robot</a>
-      </div>
+<!-- ABOUT -->
+
+<section class="section about" id="about">
+
+    <div class="container">
+
+        <div class="section-tag">WHO I AM</div>
+
+        <h2 class="section-title">About Me</h2>
+
+        <div class="about-box">
+
+            <p>
+                I'm a student and developer who enjoys exploring
+                how technology works and turning ideas into
+                practical projects.
+            </p>
+
+            <p>
+                From experimenting with websites to developing
+                my own AI assistant, I enjoy learning through
+                hands-on work, solving problems and discovering
+                new possibilities in software.
+            </p>
+
+            <p>
+                My long-term ambition is to contribute to the
+                future of Artificial Intelligence and robotics
+                by building useful, innovative technology.
+            </p>
+
+        </div>
+
     </div>
-    <div class="hero-art">
-      <div class="orbit"></div><div class="core">✳</div>
-      <div class="hud"><span>NEXA CORE</span><span>AI SYSTEM ONLINE</span></div>
-    </div>
-  </div>
+
 </section>
 
-<section id="technology">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">BUILT TO EXPLORE</div>
-      <h2>Technology with a purpose.</h2>
-      <p class="muted">A growing project combining AI conversation, practical tools, and interactive robotics concepts.</p>
+<!-- PROJECTS -->
+
+<section class="section" id="projects">
+
+    <div class="container">
+
+        <div class="section-tag">WHAT I'M BUILDING</div>
+
+        <h2 class="section-title">Featured Projects</h2>
+
+        <p class="section-desc">
+            Ideas, experiments and projects that represent
+            my journey into technology.
+        </p>
+
+        <div class="project-grid">
+
+            <!-- PROJECT 1: NEXA AI -->
+
+            <div class="project-card">
+
+                <div class="project-icon">
+
+                    <svg viewBox="0 0 64 64"
+                         fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+
+                        <g stroke="currentColor"
+                           stroke-width="2"
+                           stroke-linecap="round"
+                           stroke-linejoin="round">
+
+                            <circle cx="32" cy="32" r="22"/>
+
+                            <circle cx="32" cy="32" r="8"/>
+
+                            <circle cx="18" cy="22" r="3"/>
+                            <circle cx="46" cy="22" r="3"/>
+                            <circle cx="18" cy="42" r="3"/>
+                            <circle cx="46" cy="42" r="3"/>
+
+                            <path d="M21 24L26 28"/>
+                            <path d="M43 24L38 28"/>
+                            <path d="M21 40L26 36"/>
+                            <path d="M43 40L38 36"/>
+
+                            <path d="M32 10V4"/>
+                            <path d="M32 60V54"/>
+                            <path d="M10 32H4"/>
+                            <path d="M60 32H54"/>
+
+                        </g>
+
+                    </svg>
+
+                </div>
+
+                <h3>NEXA AI</h3>
+
+                <p>
+                    My personal AI assistant project.
+                    Exploring AI-powered conversations,
+                    memory, voice interaction and assistant
+                    functionality through development.
+                </p>
+
+                <span class="project-type">
+                    AI ASSISTANT � IN DEVELOPMENT
+                </span>
+
+            </div>
+
+            <!-- PROJECT 2: NEXA WEB -->
+
+            <div class="project-card">
+
+                <div class="project-icon">
+
+                    <svg viewBox="0 0 64 64"
+                         fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+
+                        <g stroke="currentColor"
+                           stroke-width="2"
+                           stroke-linecap="round"
+                           stroke-linejoin="round">
+
+                            <rect x="7" y="10"
+                                  width="50" height="44"
+                                  rx="6"/>
+
+                            <path d="M7 21H57"/>
+
+                            <circle cx="14" cy="16"
+                                    r="1.5"/>
+
+                            <circle cx="20" cy="16"
+                                    r="1.5"/>
+
+                            <circle cx="26" cy="16"
+                                    r="1.5"/>
+
+                            <path d="M20 31L14 36L20 41"/>
+
+                            <path d="M29 31L35 36L29 41"/>
+
+                            <path d="M40 43H49"/>
+
+                            <path d="M40 36H49"/>
+
+                        </g>
+
+                    </svg>
+
+                </div>
+
+                <h3>NEXA Web Interface</h3>
+
+                <p>
+                    A web interface for my personal AI project,
+                    designed around a modern assistant experience
+                    and a clean futuristic visual style.
+                </p>
+
+                <span class="project-type">
+                    WEB DEVELOPMENT
+                </span>
+
+            </div>
+
+            <!-- PROJECT 3: ROBOTICS -->
+
+            <div class="project-card">
+
+                <div class="project-icon">
+
+                    <svg viewBox="0 0 64 64"
+                         fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+
+                        <g stroke="currentColor"
+                           stroke-width="2"
+                           stroke-linecap="round"
+                           stroke-linejoin="round">
+
+                            <!-- Robot arm base -->
+
+                            <path d="M12 51H30"/>
+                            <path d="M17 51V46"/>
+                            <path d="M25 51V46"/>
+                            <path d="M15 46H27"/>
+
+                            <!-- Lower arm -->
+
+                            <circle cx="24" cy="40"
+                                    r="6"/>
+
+                            <path d="M27 36L37 25"/>
+
+                            <!-- Upper joint -->
+
+                            <circle cx="40" cy="22"
+                                    r="6"/>
+
+                            <!-- Upper arm -->
+
+                            <path d="M44 19L51 12"/>
+
+                            <!-- Gripper -->
+
+                            <circle cx="52" cy="11"
+                                    r="3"/>
+
+                            <path d="M54 9L59 5"/>
+                            <path d="M54 13L59 17"/>
+
+                            <!-- Mechanical details -->
+
+                            <path d="M14 35L19 30"/>
+                            <path d="M19 30L24 35"/>
+
+                            <path d="M33 29L37 33"/>
+
+                            <path d="M40 16V12"/>
+                            <path d="M34 22H30"/>
+
+                        </g>
+
+                    </svg>
+
+                </div>
+
+                <h3>Robotics Exploration</h3>
+
+                <p>
+                    Exploring humanoid robotics, intelligent
+                    machines and the possibilities of combining
+                    software, AI and robotics.
+                </p>
+
+                <span class="project-type">
+                    FUTURE EXPLORATION
+                </span>
+
+            </div>
+
+        </div>
+
     </div>
-    <div class="cards">
-      <article class="card"><div class="card-icon">✳</div><h3>AI conversation</h3><p>Ask questions and explore ideas through a natural chat experience connected to an AI service.</p></article>
-      <article class="card"><div class="card-icon">⌘</div><h3>Useful tools</h3><p>A foundation for adding practical assistant features one step at a time.</p></article>
-      <article class="card"><div class="card-icon">◈</div><h3>Humanoid vision</h3><p>Explore an interactive 3D robot model as an early step toward a robotics project.</p></article>
-    </div>
-  </div>
+
 </section>
 
-<section id="assistant">
-  <div class="wrap chat-layout">
-    <div class="chat-intro">
-      <div class="eyebrow">YOUR DIGITAL ASSISTANT</div>
-      <h2>Talk to NEXA.</h2>
-      <p class="muted">Send a message and NEXA will respond using the connected AI backend.</p>
-      <div class="pills"><span class="pill">CHAT ONLINE</span><span class="pill">AI CONNECTED</span></div>
+<!-- SKILLS -->
+
+<section class="section skills" id="skills">
+
+    <div class="container">
+
+        <div class="section-tag">TECHNOLOGIES</div>
+
+        <h2 class="section-title">Skills & Learning</h2>
+
+        <p class="section-desc">
+            Technologies I work with and subjects
+            I'm actively exploring.
+        </p>
+
+        <div class="skill-list">
+
+            <span class="skill">Python</span>
+            <span class="skill">JavaScript</span>
+            <span class="skill">C++</span>
+            <span class="skill">HTML</span>
+            <span class="skill">CSS</span>
+            <span class="skill">Web Development</span>
+            <span class="skill">AI Exploration</span>
+            <span class="skill">Problem Solving</span>
+
+        </div>
+
     </div>
-    <div class="chatbox">
-      <div class="chat-head">
-        <span class="chat-title">✳ NEXA AI</span>
-        <span class="status" id="chatStatus">● AI ONLINE</span>
-      </div>
-      <div class="messages" id="messages" aria-live="polite">
-        <div class="msg">Hello! I'm NEXA. Send me a message to get started.</div>
-      </div>
-      <form class="chat-form" id="chatForm">
-        <input id="chatInput" name="message" type="text" placeholder="Message NEXA..." autocomplete="off" aria-label="Message NEXA" maxlength="4000" required>
-        <button id="sendButton" type="submit">SEND</button>
-      </form>
-    </div>
-  </div>
+
 </section>
 
-<section id="humanoid">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="eyebrow">NEXA ROBOTICS DIVISION</div>
-      <h2>Meet the humanoid.</h2>
-      <p class="muted">Drag to rotate the 3D model and explore the robot concept.</p>
+<!-- JOURNEY -->
+
+<section class="section" id="journey">
+
+    <div class="container">
+
+        <div class="section-tag">WHAT'S NEXT</div>
+
+        <h2 class="section-title">My Journey</h2>
+
+        <div class="journey-box">
+
+            <h3>Learning. Building. Evolving.</h3>
+
+            <p>
+                Currently focused on learning C++ and strengthening
+                my programming fundamentals. My journey will continue
+                through exploring new programming languages,
+                artificial intelligence, software development
+                and robotics.
+            </p>
+
+            <p style="margin-top:15px;">
+                My long-term vision is to build an AI and robotics
+                company and contribute to technologies that
+                can shape the future.
+            </p>
+
+        </div>
+
     </div>
-    <div class="robot-panel">
-      <model-viewer src="assets/robonaut.glb" alt="NEXA humanoid robot 3D model" camera-controls auto-rotate rotation-per-second="12deg" shadow-intensity="1" loading="lazy">
-        <p slot="error" class="robot-note">Model unavailable. Check that assets/robonaut.glb exists.</p>
-      </model-viewer>
-      <div class="robot-note">NEXA HUMANOID · 3D CONCEPT PREVIEW</div>
-    </div>
-  </div>
+
 </section>
-</main>
+
+<!-- CONTACT -->
+
+<section class="section contact" id="contact">
+
+    <div class="container">
+
+        <div class="section-tag">GET IN TOUCH</div>
+
+        <h2 class="section-title">Let's Build the Future.</h2>
+
+        <div class="contact-box">
+
+            <p>
+                Interested in technology, creative ideas,
+                AI and the future of robotics?
+            </p>
+
+            <p>
+                Have a project idea or want to connect?
+                You can reach me through email.
+            </p>
+
+            <!-- Replace with a guardian-approved public email -->
+
+            <a class="contact-button"
+               href="mailto:rudraveerdwivedi88@gmail.com?subject=Hello%20Rudra">
+                Email Me
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- FOOTER -->
 
 <footer>
-  <div class="wrap footer-inner">
-    <span>© <span id="year"></span> NEXA PROJECT</span>
-    <span>PERSONAL AI ASSISTANT · FUTURE ROBOTICS</span>
-  </div>
+
+    <p>
+        Designed & built by <span>Rudra Veer Dwivedi</span>
+    </p>
+
+    <p>
+        Rudra.dev | Building Intelligence. Exploring Tomorrow.
+    </p>
+
 </footer>
 
-<script>
-const menu = document.getElementById('menu');
-const nav = document.getElementById('nav');
-
-menu.addEventListener('click', () => {
-  const open = nav.classList.toggle('open');
-  menu.setAttribute('aria-expanded', String(open));
-  menu.textContent = open ? '×' : '☰';
-});
-
-nav.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    nav.classList.remove('open');
-    menu.setAttribute('aria-expanded', 'false');
-    menu.textContent = '☰';
-  });
-});
-
-const form = document.getElementById('chatForm');
-const input = document.getElementById('chatInput');
-const messages = document.getElementById('messages');
-const sendButton = document.getElementById('sendButton');
-const chatStatus = document.getElementById('chatStatus');
-
-function addMessage(text, type = '') {
-  const el = document.createElement('div');
-  el.className = ('msg ' + type).trim();
-  el.textContent = text;
-  messages.appendChild(el);
-  messages.scrollTop = messages.scrollHeight;
-  return el;
-}
-
-form.addEventListener('submit', async event => {
-  event.preventDefault();
-  const text = input.value.trim();
-  if (!text || sendButton.disabled) return;
-
-  addMessage(text, 'user');
-  input.value = '';
-  input.disabled = true;
-  sendButton.disabled = true;
-  sendButton.textContent = '...';
-  chatStatus.textContent = '● THINKING';
-
-  const reply = addMessage('NEXA is thinking...');
-
-  try {
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({message: text})
-    });
-
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'AI request failed.');
-    if (typeof data.reply !== 'string' || !data.reply.trim()) {
-      throw new Error('NEXA returned an empty response.');
-    }
-
-    reply.textContent = data.reply.trim();
-    chatStatus.textContent = '● AI ONLINE';
-  } catch (error) {
-    reply.classList.add('error');
-    reply.textContent = 'Connection issue: ' + (error.message || 'Please try again.');
-    chatStatus.textContent = '● CONNECTION ISSUE';
-  } finally {
-    input.disabled = false;
-    sendButton.disabled = false;
-    sendButton.textContent = 'SEND';
-    input.focus();
-    messages.scrollTop = messages.scrollHeight;
-  }
-});
-
-document.getElementById('year').textContent = new Date().getFullYear();
-</script>
 </body>
 </html>
-
